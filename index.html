@@ -7,12 +7,107 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: Arial, sans-serif; line-height: 1.6; background: #f4f4f4; color: #333; }
-    header { background: #24292e; color: white; padding: 20px 0; text-align: center; }
-    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
+  header {
+  height: 60vh; /* half screen height */
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+              url('images/photo8.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+header h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+}
+
+header p {
+  font-size: 1.5em;
+  max-width: 600px;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+}
+
+nav {
+  margin-top: 50px;
+}
+
+nav a {
+  color: white;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1em;
+}
     .container { max-width: 1000px; margin: auto; padding: 20px; }
     section { margin-bottom: 40px; }
     h2 { color: #24292e; margin-bottom: 10px; }
-    .gallery img { width: 100%; max-width: 200px; margin: 10px; border-radius: 5px; }
+    .slideshow-container {
+  position: relative;
+  max-width: 700px;
+  margin: auto;
+}
+
+.slide {
+  display: none;
+}
+
+.slide img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 45%;
+  width: auto;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  z-index: 10;
+}
+
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  margin: 0 3px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+.fade {
+  animation-name: fade;
+  animation-duration: 0.8s;
+}
+
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
     .skills span { background: #eee; padding: 5px 10px; border-radius: 5px; margin: 5px; display: inline-block; }
     .contact form { display: flex; flex-direction: column; gap: 10px; }
     .contact input, .contact textarea { padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
@@ -67,15 +162,30 @@
   </section>
 
   <section id="gallery">
-    <h2>Photo Gallery</h2>
-    <div class="gallery" style="display: flex; flex-wrap: wrap;">
-      <img src="photo1.jpg" alt="Photo 1"/>
-      <img src="photo2.jpg" alt="Photo 2"/>
-      <img src="photo3.jpg" alt="Photo 3"/>
-      <img src="photo4.jpg" alt="Photo 4"/>
-      <img src="photo5.jpg" alt="Photo 5"/>
+  <h2>Photo Gallery</h2>
+  <div class="slideshow-container">
+    <div class="slide fade">
+      <img src="images/photo1.jpg" alt="Photo1">
     </div>
-  </section>
+    <div class="slide fade">
+      <img src="images/photo2.jpg" alt="Photo2">
+    </div>
+    <div class="slide fade">
+      <img src="images/photo3.jpg" alt="Photo3">
+    </div>
+    <div class="slide fade"><img src="images/photo4.jpg" alt="photo4"></div>
+    <div class="slide fade"><img src="images/photo5.jpg" alt="photo5"></div>
+    <a class="prev" onclick="changeSlide(-1)">❮</a>
+    <a class="next" onclick="changeSlide(1)">❯</a>
+  </div>
+  <br>
+  <div style="text-align:center">
+    <span class="dot" onclick="setSlide(1)"></span>
+    <span class="dot" onclick="setSlide(2)"></span>
+    <span class="dot" onclick="setSlide(3)"></span>
+  </div>
+</section>
+
 
   <section id="contact" class="contact">
     <h2>Contact Me</h2>
@@ -92,6 +202,34 @@
 <footer>
   <p>&copy; 2025 Osindero Folarin. All rights reserved.</p>
 </footer>
+<script>
+let slideIndex = 1;
+showSlides(slideIndex);
 
+function changeSlide(n) {
+  showSlides(slideIndex += n);
+}
+
+function setSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("slide");
+  let dots = document.getElementsByClassName("dot");
+  if (n > slides.length) { slideIndex = 1 }    
+  if (n < 1) { slideIndex = slides.length }
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].classList.remove("active");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].classList.add("active");
+}
+</script>
 </body>
 </html>
+
